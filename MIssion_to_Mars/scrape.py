@@ -5,12 +5,28 @@ import pandas as pd
 import datetime as dt
 import requests
 
+# Initiate headless driver for deployment
+from webdriver_manager.chrome import ChromeDriverManager
+
+
 
 def scrape_all():
-    # Initiate headless driver for deployment
-    from webdriver_manager.chrome import ChromeDriverManager
     executable_path = {'executable_path': ChromeDriverManager().install()}
     browser = Browser('chrome', **executable_path, headless=True)
+    news_title, news_paragraph = mars_news(browser)
+    # Create dictionary for all info scraped from sources above
+    mars_dict = {
+        "news_title": news_title,
+        "news_para": news_para,
+        "featured_img_url": featured_img_url,
+        "fact_table": fact_table,
+        "hemisphere_images": hemisphere_img_urls
+    }
+
+    return mars_dict
+
+def mars_news(browser):
+    
 
     # Scrape news title and news paragraph -> https://redplanetscience.com/
     url = "https://redplanetscience.com/"
@@ -103,13 +119,4 @@ def scrape_all():
 
         hemisphere_img_urls.append(dict_to_list(title_img_dicts))
 
-    # Create dictionary for all info scraped from sources above
-    mars_dict = {
-        "news_title": news_title,
-        "news_para": news_para,
-        "featured_img_url": featured_img_url,
-        "fact_table": fact_table,
-        "hemisphere_images": hemisphere_img_urls
-    }
-
-    return mars_dict
+    
